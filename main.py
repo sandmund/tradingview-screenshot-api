@@ -1,8 +1,8 @@
 from fastapi import FastAPI, Query
 from fastapi.responses import FileResponse, JSONResponse
 import asyncio
-from playwright.async_api import async_playwright, TimeoutError as PlaywrightTimeoutError
 import os
+from playwright.async_api import async_playwright, TimeoutError as PlaywrightTimeoutError
 
 app = FastAPI()
 
@@ -28,3 +28,9 @@ async def get_screenshot(symbol: str = Query(...), interval: int = Query(5)):
 
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
+
+# Read port from environment
+if __name__ == "__main__":
+    import uvicorn
+    port = int(os.environ.get("PORT", 10000))
+    uvicorn.run("main:app", host="0.0.0.0", port=port)
